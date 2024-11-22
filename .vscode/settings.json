@@ -1,0 +1,13 @@
+{
+  "gillianDebugger.runMode": "installed",
+  "gillianDebugger.wisl.commandLineArguments": [
+    "-R",
+    "/vol/rr/gillian_opam/5.2/share/wisl/runtime"
+  ],
+  "gillianDebugger.wisl.environmentVariables": {
+    "PATH": "/vol/rr/z3-4.13.3/bin"
+  },
+  "gillianDebugger.binDirectory": "/vol/rr/gillian_opam/5.2/bin",
+  "gillianDebugger.useManualProof": true,
+  "gillianDebugger.wisl.showSymbolicDebugButton": false
+}
