@@ -1,7 +1,5 @@
 # Gillian Lab Exercises
 
-This repo contains some exercises for the lab on Gillian in the Scalable Software Verification course at Imperial College London.
+This repo contains some exercises for the first lab on Gillian.
 
-See [`README.pdf`](./README.pdf) for instructions. 
-
-`.vscode/settings.json` contains some default settings for the Gillian Debugging extension to make things work smoothly on lab machines.
+[See here for instructions.](https://gillianplatform.github.io/sphinx/wisl/lab.html)
