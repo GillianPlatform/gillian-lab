@@ -1,11 +1,10 @@
 {
   "name": "Gillian Debugging lab",
-  "image": "ghcr.io/gillianplatform/gillian:tacas25",
+  "image": "ghcr.io/gillianplatform/gillian:lab-pretest",
   "customizations": {
     "vscode": {
       "extensions": [
-        "${containerWorkspaceFolder}/.devcontainer/gillian-0.0.2.vsix",
-        "${containerWorkspaceFolder}/.devcontainer/gillian-debugger-0.1.0.vsix"
+        "${containerWorkspaceFolder}/.devcontainer/gillian-debugger-0.1.1.vsix"
       ]
     }
   }

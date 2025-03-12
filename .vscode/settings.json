@@ -1,5 +1,8 @@
 {
   "gillianDebugger.runMode": "installed",
   "gillianDebugger.useManualProof": true,
-  "gillianDebugger.wisl.showSymbolicDebugButton": false
+  "gillianDebugger.wisl.showSymbolicDebugButton": false,
+  "gillianDebugger.wisl.commandLineArguments": [
+    "--procs-only"
+  ]
 }
