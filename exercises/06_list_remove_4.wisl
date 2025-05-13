@@ -1,0 +1,36 @@
+@config manual_fold : true
+
+// ========= List removal new specification =========
+//
+// Now, suppose that we want to create a new list without the element k instead of 
+// doing it inplace. 
+//
+// Modify the postcondition and the code itself to fit the new specification. 
+// Keep in mind to make the postcondition as strong as possible.
+//
+// You may copy and utilize any functions from the previous exercises
+
+predicate list(+x, alpha) {
+  (x == null) * (alpha == []);
+  (x -b> #v, #z) * list(#z, #beta) * (alpha == #v :: #beta)
+}
+
+{ (x == #x) * (k == #k) * list(#x, #vs) }
+function list_remove_copy(x, k) {
+  if (x == null) {
+    skip
+  } else {
+    v := [x];
+    next := [x + 1];
+    if (v == k){
+      free(x);
+      x := list_remove_copy(next, k)
+    } else {
+      z := list_remove_copy(next, k);
+      [x + 1] := z
+    }
+  };
+  
+  return x
+}
+{ emp }

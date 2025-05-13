@@ -1,0 +1,39 @@
+@config manual_fold : true
+
+// ========= List removal Stronger postcondition =========
+//
+// Notice that the postcondition of the function above is weak: we could 
+// potentially just return any list, as long as it does not have the element k.
+// Try to make the function below have a stronger specification, by creating
+// a new predicate that models the relationship between the new list and the old list.
+//
+// A skeleton predicate is provided for you, feel free to modify it.
+
+predicate list(+x, alpha) {
+  (x == null) * (alpha == []);
+  (x -b> #v, #z) * list(#z, #beta) * (alpha == #v :: #beta)
+}
+
+predicate list_pred(+new_list, +old_list, +val) {
+  (new_list == [])
+}
+
+{ (x == #x) * (k == #k) * list(#x, #vs) }
+function list_remove_strong(x, k) {
+  if (x == null) {
+    skip
+  } else {
+    v := [x];
+    next := [x + 1];
+    if (v == k){
+      free(x);
+      x := list_remove_strong(next, k)
+    } else {
+      z := list_remove_strong(next, k);
+      [x + 1] := z
+    }
+  };
+  return x
+  
+}
+{ list(ret, #nvs) * list_pred(#nvs, #vs, #k) }

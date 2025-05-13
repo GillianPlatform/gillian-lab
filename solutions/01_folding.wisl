@@ -1,0 +1,23 @@
+@config manual_fold : true
+
+// === Folding and Unfolding ===
+//
+// Add fold and/or unfold tactics to make this function verify.
+//
+// If you are stuck, you can find a hint on the hint folder.
+
+
+predicate list(+x, vs) {
+    (x == null) * (vs == nil);
+    (x -> #v, #z) * list(#z, #vss) * (vs == #v::#vss)
+}
+
+{ (v == #v) }
+function list_allocate_node(v){
+  t := new(2);
+  [t] := v;
+  [[ fold list(null, []) ]];
+  [[ fold list(t, [ #v ]) ]];
+  return t
+}
+{ list(ret, [ #v ]) }

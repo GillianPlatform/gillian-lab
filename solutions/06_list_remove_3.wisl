@@ -1,0 +1,48 @@
+@config manual_fold : true
+
+// ========= List removal Stronger postcondition =========
+//
+// Notice that the postcondition of the function above is weak: we could 
+// potentially just return any list, as long as it does not have the element k.
+// Try to make the function below have a stronger specification, by creating
+// a new predicate that models the relationship between the new list and the old list.
+//
+// A skeleton predicate is provided for you, feel free to modify it.
+
+predicate list(+x, vs) {
+  (x == null) * (vs == []);
+  (x -b> #v, #z) * list(#z, #vss) * (vs == #v :: #vss)
+}
+
+predicate list_without(+xs, +ys, +v) {
+  (xs == []) * (ys == []);
+  (xs == #x :: #xs) * (ys == #x :: #ys) * (v != #x) * list_without(#xs, #ys, v);
+  (ys == #y :: #ys) * (#y == v) * list_without(xs, #ys, v)
+}
+
+{ (x == #x) * (k == #k) * list(#x, #vs) }
+function list_remove_strong(x, k) {
+  [[ unfold list(#x, #vs)]];
+  if (x == null) {
+    [[ fold list_without([], [], #k) ]];
+    [[ fold list(null, [])]]
+  } else {
+    v := [x];
+    next := [x + 1];
+    if (v == k){
+      free(x);
+      x := list_remove_strong(next, k); 
+      [[ assert {bind: #xs} list(x, #xs) ]];
+      [[ fold list_without(#xs, #vs, k)]]
+    } else {
+      z := list_remove_strong(next, k);
+      [x + 1] := z;
+      [[ assert {bind: #zs} list(z, #zs) ]];
+      [[ fold list_without(v :: #zs, #vs, k)]];
+      [[ fold list(x, v :: #zs)]]
+    }
+  };
+  return x
+}
+{ list(ret, #nvs) * list_without(#nvs, #vs, #k) }
+

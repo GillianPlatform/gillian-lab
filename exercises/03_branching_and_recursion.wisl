@@ -1,0 +1,58 @@
+@config manual_fold : true
+
+// === Dealing with Ifs and Recursion ===
+// Using the same predicate, verify the functions concat and copy that 
+// deal with recursively going into the list.
+//
+// Note that if we are given a function specification of the form
+//   { P(n) }
+//     f(n) { ...; return r }
+//   { Q(n) }
+// ... then this function specification is in some function specification context C.
+// Every time a function call is made to f, Gillian checks whether the function specification is in C
+// and proceeds with the consume/produce operation. 
+// For recursive calls, note that the specification of the function you are trying to verify is already
+// included in the function specification context C. This allows you to verify recursive functions without
+// any issues.
+
+predicate list(+x, alpha) {
+    (x == null) * (alpha == nil);
+    (x -> #v, #z) * list(#z, #beta) * (alpha == #v::#beta)
+}
+
+{ (v == #v) }
+function list_allocate_node(v){
+  t := new(2);
+  [t] := v;
+  return t
+}
+{ list(ret, [ #v ]) }
+
+{(x == #x) * (y == #y) * list(#x, #vx) * list(#y, #vy) }
+function list_concat(x, y) {
+  if (x == null){
+    x := y
+  } else {
+    t := [x + 1];
+    z := list_concat(t, y);
+    [x + 1] := z
+  };
+  return x
+}
+{ list(ret,  #vx @ #vy) }
+
+{ (x == #x) * list(#x, #vs) }
+function list_copy(x){
+  y := null;
+  if (x != null) {
+    k := [x];
+    y := list_allocate_node(k);
+    t := [x + 1];
+    z := list_copy(t);
+    [y + 1] := z
+  } else {
+    skip
+  };
+  return y
+}
+{ list(#x, #vs) * list(ret, #vs) }

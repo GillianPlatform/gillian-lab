@@ -1,0 +1,115 @@
+@config manual_fold : true
+
+// === Assert tactic ===
+//
+// In this exercise, you will learn one of Gillian's proof tactics: the assert tactic.
+//
+// Sometimes when verifying a function you need to a specific logical condition.
+// With the assert tactic you are able to "assert" that logical condition (provided that it actually holds).
+// If it does in fact hold, it puts it in your proof state, able to be used for further analysis.
+//
+// The structure of the assert tactic is as follows:
+//
+// [[ assert {bind: param_1, param_2, ..., param_n} {logical condition} ]]
+//
+// But what is this "bind" portion of the assert tactic? This is an optional portion of the 
+// assert tactic that allows you to name portions of the logical condition that are originally
+// Gillian's automated logical variables.
+
+// To give a small example, say we have unfolded the list and know that it is not empty.
+// Gillian will naturally generate some logical variables for #v and #z, and #vss (from the list predicate).
+// It will generally be of the form "lvar_{some number}". But how do we reference these logical variables?
+// This is where the "bind" part comes in! We can apply the following assert tactic:
+// [[ assert {bind: #v, #vss, #z} (x -> #v, #z) * list(#z, #vss) ]]
+//
+// You can see a simple example with list pop below. Step through the debugger and observe the state
+// before and after the proof tactic and you should see the logical conditions now have the
+// right bindings. Note that in this example it is not strictly necessary, but rather it is just
+// helpful to understand well what is being manipulated. However, in the functions below and in later
+// exercises, you will need the assert tactic to be able to reference logical variables in other proof
+// tactics. 
+//
+// Knowing this, try to verify the functions list_reverse and find_min using the assert tactic. 
+
+{ (x == #x) * (x != null) * list(#x, #k :: #vs) }
+function list_pop(x) {
+  [[ unfold list(#x, #k :: #vs)]];
+  [[ assert {bind: #z} (x -> #k, #z) * list(#z, #vs)]];
+  r := new(2);
+  k := [x];
+  z := [x + 1];
+  [r] := k;
+  [r + 1] := z;
+  return r
+}
+{ list(#z, #vs) * (ret == #r) * #r -b> #k, #z }
+
+predicate list(+x, vs) {
+    (x == null) * (vs == nil);
+    (x -> #v, #z) * list(#z, #vss) * (vs == #v::#vss)
+}
+
+{(x == #x) * (y == #y) * list(#x, #xs) * list(#y, #ys) }
+function list_concat(x, y) {
+  [[ unfold list(x, #xs) ]];
+  if (x == null){
+    x := y
+  } else {
+    t := [x + 1];
+    z := list_concat(t, y);
+    [x + 1] := z;
+    [[ fold list(x, #xs @ #ys) ]]
+  };
+  return x
+}
+{ list(ret,  #xs @ #ys) }
+
+{ (x == #x) *  list(#x, #vs) }
+function list_reverse(x){
+  [[ unfold list(x, #vs) ]];
+  if (x != null) {
+    t := [x + 1];
+    [x + 1] := null;
+    [[ assert {bind: #v, #vss} (#vs == (#v :: #vss)) ]];
+    z := list_reverse(t);
+    [[ fold list(null, [] )]];
+    [[ fold list(x, [ #v ])]];
+    y := list_concat(z, x)
+  } else {
+    y := null;
+    [[ fold list(y, rev(#vs)) ]]
+  };
+  return y
+}
+{ list(ret, rev #vs) }
+
+predicate min(+vs, v : Int) {
+  (vs == [v]);
+  (vs == #v :: #vs) * (v < #v) * min(#vs, v);
+  (vs == #v :: #vs) * (#v <= #min) * min(#vs, #min) * (v == #v)
+}
+
+{ (x == #x) * (x != null) * list(x, #vs) }
+function find_min(x) {
+  [[ unfold list(x, #vs) ]];
+  val := [x];
+  assume_type(val, Int); // TODO: change this to the new type assertion
+  next := [x + 1];
+  if (next == null) {
+    [[ assert {bind: #vss} list(next, #vss) ]];
+    [[ unfold list(next, #vss) ]];
+    r := val;
+    [[ fold list(null, [])]]
+  } else {
+    r := find_min(next, val);
+    if (val <= r) {
+      r := val
+    } else {
+      skip
+    }
+  };
+  [[ fold min(#vs, r) ]];
+  [[ fold list(x, #vs) ]];
+  return r
+}
+{ list(#x, #vs) * min(#vs, #r) * (ret == #r)}

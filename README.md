@@ -1,3 +1,1 @@
-# Gillian Lab Exercises
-
-This repo contains some exercises for a lab on Gillian.
+# Gillian lab @ SSFT 25

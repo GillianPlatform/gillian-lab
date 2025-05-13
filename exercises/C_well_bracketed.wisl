@@ -1,0 +1,132 @@
+@config manual_fold : false
+
+// === Exercise C : Well-bracketed function ===
+//
+// Having worked with singly-linked lists, it is now time to work with an application of it. 
+//
+// The problem is as follows: given a string s, can we write a function that checks that it is 
+// well-bracketed? 
+//
+// Well-bracketed in this case means: 
+//
+// 1. The number of open brackets must match the number of close brackets (of the same type)
+// 2. Whenever there is an open bracket, there must be later on a close bracket that matches it
+// 3. The order of open brackets must match the order of close brackets. For example,
+// "[<]>" is not well-bracketed, while "[<>]" is. 
+// 4. Normal characters are ignored. 
+//
+// To give some clear examples:
+// "[<a>]" is well-bracketed
+// "[]<>>" is not well-bracketed
+// “<ab[c]e” is not well-bracketed
+//
+// For the sake of simplicity, we assume that the only brackets that we care for are "[]" and "<>".
+// 
+// parameter s in the functions is treated as a stack implemented as a singly-linked list.
+// Look over the function wellBr and wellBrhelper in which the correct code is provided for you.
+//
+// The goal for you is to provide the predicate wbs, which given the string list a and the stack b, 
+// the predicate should be able to deduce the parameter r which indicates whether list a is well-bracketed
+// or not.
+//
+// The predicates ob, cb, nb are provided to you, which indicate whether the character c is an open bracket,
+// close bracket, or neither respectively.
+
+predicate list(+x, vs) {
+  (x == null) * (vs == []);
+  (x -b> #v, #next) * list(#next, #vs) *
+  (vs == #v :: #vs)
+}
+
+{ (v == #v) }
+function list_allocate_node(v) {
+  t := new(2);
+  [t] := v;
+  return t
+}
+{ list(ret, [ #v ]) }
+
+{ (x == #x) * (k == #k) * list(#x, #vs) }
+function list_push(x, k) {
+  z := list_allocate_node(k);
+  [z + 1] := x;
+  return z
+}
+{ list(ret, #k :: #vs) }
+
+{ (x == #x) * (x != null) * list(#x, #k :: #vs) }
+function list_pop(x) {
+  r := new(2);
+  k := [x];
+  z := [x + 1];
+  [r] := k;
+  [r + 1] := z;
+  return r
+}
+{ list(#z, #vs) * (ret == #r) * #r -b> #k, #z }
+
+// Well bracketed predicates
+
+predicate ob(+c : String) {
+  ((c == "<") || (c == "["))
+}
+
+predicate cb(+c : String) {
+  ((c == ">") || (c == "]"))
+}
+
+predicate nb(+c : String) {
+  ((c != "<") /\ (c != ">") /\ (c != "[") /\ (c != "]"))
+}
+
+predicate wbs(+a, +b, r : Bool) {
+  (a == []) * (b == []) * (r == true)
+}
+
+predicate wb(+a, r : Bool) {
+  wbs(a, [], r)
+}
+
+{ (x == #x) * (s == #s) * list(#x, #a) * list(#s, #b) * wbs(#a, #b, #r) }
+function wellBr_helper(x, s) {
+  ok := true;
+  if (x == null) {
+    if (s != null) {
+      ok := false
+    } else {
+      skip
+    }
+  } else {
+    c := [x];
+    n := [x + 1];
+    if ((c == "<") || (c == "[")) {
+      s := list_push(s, c);
+      ok := wellBr_helper(n, s)
+    } else {
+      if ((c == ">") || (c == "]")) {
+        if (s == null) {
+          ok := false
+        } else {
+          r := list_pop(s);
+          d := [r];
+          s := [r + 1];
+          bpair := ((d == "<") && (c == ">")) || ((d == "[") && (c == "]"));
+          ok := wellBr_helper(n, s);
+          ok := ok && bpair
+        }
+      } else {
+        ok := wellBr_helper(n, s)
+      }
+    }
+  };
+  return ok
+}
+{ list(#x, #a) * wbs(#a, #b, #r) * (ret == #r) }
+
+{ (x == #x) * list(x, #a) * wb(#a, #r) }
+function wellBr(x) {
+  s := null;
+  r := wellBr_helper(x, s);
+  return r
+}
+{ list(#x, #a) * wb(#a, #r) * (ret == #r) }
