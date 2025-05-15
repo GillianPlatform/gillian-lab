@@ -1,43 +1,49 @@
-@config manual_fold : true
-
-// === Apply tactic ===
+// ========== 05 - Applying lemmas ==========
 //
-// In this exercise, we will go through the final tactic you will need: the apply tactic.
+// In this exercise, we'll demonstrate the final tactic you'll need: apply.
 //
-// In Gillian, sometimes it is not enough to be able to unfold/fold predicates. There are facts
-// that are only able to be obtained through induction. This is where lemmas come in!
+// You may find yourself applying the same sequence of tactics in multiple
+// places. You may also need to obtain facts inductively, which can't be done
+// with the previously shown tactics. This is where lemmas come in!
 //
-// Lemmas have the following structure: 
-//
-//     lemma {lemma name} {
+// Lemmas have the following structure:
+//     lemma {lemma-name} {
 //       statement:
 //         forall param_1, param_2, ..., param_n.
-//            {premises} |- {conclusion}
+//            {premise} |- {conclusion}
 //     }
 //
-// And the apply tactic is as follows: 
+// And the apply tactic like so:
+//     [[ apply {lemma-name}(param_1, param_2, ..., param_n) ]]
 //
-//     [[ apply {lemma name}(param_1, param_2, ..., param_n) ]]. 
+// This will check that the state satisfies the lemma's premise, consume that
+// premise, and produce the conclusion - just like a function call.
+// Note that Gillian normally expects a lemma to have an accompanying proof
+// (which is verified similarly to a function), but a deeper dive into lemmas
+// is outside the scope of this lab. For these exercises, the lemmas can be
+// given without proof.
+// 
+// Lemmas will always be provided for you; since lemmas themselves are not
+// verified in this lab, we advise against writing your own.
 //
-// The apply tactic will succeed when all premises do in fact hold and are in your proof state. The lemma
-// will consume your premises and produce the conclusion on your proof state.
+// As an example, look at list_allocate_node below. Instead of applying fold
+// twice (once for the empty list, and once for the single element), we can use
+// the 'singleton_list' lemma, which takes in as a premise the cell assertion
+// (t -b> v, null) (established by the previous two instructions), and produces
+// the completed predicate. 
 //
-// To give a small example, look at the function list_allocate_node. Instead of folding the empty list and then
-// folding the list again, we can apply the lemma list_allocate, which takes in as a premise the cell assertion
-// (t -> v, null), which we get from the previous two instructions. As such, the lemma can be applied, and indeed
-// it allows us to get the postcondition. 
-//
-// Note that this lemma is not necessary, but in later exercises (and even in this one), you will encounter functions
-// that do require lemmas. Lemmas will always be provided for you, and it is not necessary to create new ones.
-//
-// Knowing this, try to verify list_get and list_member using the lemmas provided to you.
+// Try verifying list_get and list_member using the provided lemmas.
 //
 // Bonus challenge: can you verify list_get without using the lemma?
 
-lemma list_allocate {
+// === DON'T EDIT THIS ===
+
+@config manual_fold : true
+
+lemma singleton_list {
   statement:
     forall t, v. 
-      (t -> v, null) |- list(t, [ #v ])
+      (t -b> v, null) |- list(t, [ #v ])
   proof:
     fold list(null, []);
     fold list(t, [ #v ])
@@ -47,13 +53,14 @@ lemma list_allocate {
 function list_allocate_node(v){
   t := new(2);
   [t] := v;
+  [[ apply singleton_list(t, v) ]];
   return t
 }
 { list(ret, [ #v ]) }
 
-predicate list(+x, alpha) {
-    (x == null) * (alpha == nil);
-    (x -> #v, #z) * list(#z, #beta) * (alpha == #v::#beta)
+predicate list(+x, vs) {
+    (x == null) * (vs == nil);
+    (x -b> #v, #z) * list(#z, #vss) * (vs == #v::#vss)
 }
 
 predicate list_search(+vs, +i, v) {
@@ -64,15 +71,26 @@ predicate list_search(+vs, +i, v) {
 lemma search_not_null {
   statement:
     forall x, vs, i, r.
-      list(x, vs) * list_search(vs, i, r) * (i != 0) |- list(x, vs) * list_search(vs, i, r) * (x != null)
-  proof:
-    unfold list_search(vs, i, r);
-    unfold list(x, #vs);
-    fold list(x, #vs);
-    fold list_search(#vs, #i, #r)
+      list(x, vs) * list_search(vs, i, r) * (i != 0) |- list(x, vs)
+      * list_search(vs, i, r) * (x != null)
 }
 
-{ (x == #x) * (i == #i) * (x != null) * list(x, #vs) * list_search(#vs, #i, #r) }
+predicate l_member(+vs, +v, r : Bool){
+  (vs == []) * (r == false);
+  (vs == v :: #ws) * (r == true) * l_member(#ws, v, #mem);
+  (vs == #v :: #ws) * (! (#v == v)) * l_member(#ws, v, r)
+}
+
+lemma list_member_create {
+  statement:
+    forall x, k, vs.
+      list(x, vs) |- list(x, vs) * l_member(vs, k, #r)
+}
+
+// === EDIT BELOW HERE ===
+
+{ (x == #x) * (i == #i) * (x != null) * list(x, #vs)
+  * list_search(#vs, #i, #r) }
 function list_get(x, i) {
   v := [x];
   next := [x + 1];
@@ -86,32 +104,6 @@ function list_get(x, i) {
 }
 { list(#x, #vs) * list_search(#vs, #i, #r) * (ret == #r) }
 
-predicate l_member(+vs, +v, r : Bool){
-  (vs == []) * (r == false);
-  (vs == v :: #rest) * (r == true) * l_member(#rest, v, #mem);
-  (vs == #v :: #rest) * (! (#v == v)) * l_member(#rest, v, r)
-}
-
-lemma list_member_create {
-  statement:
-    forall x, k, vs.
-      list(x, vs) |- list(x, vs) * l_member(vs, k, #r)
-  proof:
-    unfold list(x, vs);
-    if (x == null) {
-      fold list(x, vs);
-      fold l_member(vs, k, false)
-    } else {
-      assert {bind: #v, #beta} (#vs == #v :: #beta) * (x -> #v, #z);
-      apply list_member_create(#z, k, #beta);
-      if (#v == k) {
-        fold l_member(vs, k, true)
-      } else {
-        fold l_member(vs, k, #r)
-      }
-    }
-}
-
 { (x == #x) * (k == #k) * list(#x, #vs) }
 function list_member(x, k){
   found := false;
@@ -121,7 +113,7 @@ function list_member(x, k){
     v := [x];
     t := [x + 1];
     if (v == k){
-      found := true
+      found := true;
     } else {
       found := list_member(t, k)
     }

@@ -1,15 +1,17 @@
-@config manual_fold : true
-
-// === Folding and Unfolding ===
+// ========== 01 - Folding and unfolding ==========
 //
 // Add fold and/or unfold tactics to make this function verify.
-//
-// If you are stuck, you can find a hint on the hint folder.
 
-predicate list(+x, alpha) {
-    (x == null) * (alpha == nil);
-    (x -> #v, #z) * list(#z, #beta) * (alpha == #v::#beta)
+// === DON'T EDIT THIS ===
+
+@config manual_fold : true
+
+predicate list(+x, vs) {
+    (x == null) * (vs == nil);
+    (x -b> #v, #z) * list(#z, #vss) * (vs == #v::#vss)
 }
+
+// === EDIT BELOW HERE ===
 
 { (v == #v) }
 function list_allocate_node(v){

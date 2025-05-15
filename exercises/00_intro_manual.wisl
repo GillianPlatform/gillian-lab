@@ -1,52 +1,35 @@
-@config manual_fold : true
-
-// === INTRO ===
+// === 00 - Intro (manual mode) ===
 //
-// In Gillian, predicates are assertions and can be defined recursively.
-// The body of the predicate may comprise many cases, which are separated
-// by semicolons (;).
+// In Gillian, predicates are assertions and can be defined recursively,
+// often containing multiple cases (separated by semicolons).
+// Gillian does not immediately interpret a predicate equivalently to its
+// definition, but a predicate can be replaced with its definition (creating
+// branching paths if multiple cases apply) by 'unfolding', and the reverse by
+// 'folding'.
 //
-// One can 'unfold' predicates to expose the body of the predicate. Also,
-// if part of the state matches one of the cases of the predicate, then
-// one can also 'fold' the predicate. 
-// e.g. 
-//
-// predicate foo(p1, p2, ..., po) {
-//   P_1 * P_2 * ... * P_n;
-//   Q_1 * Q_2 * ... * Q_m
-// }
-//
-// If we are given the current state as follows:
-// { A * (P_1 * P_2 * ... * P_n) * B * C }
-// ...then part of the state corresponds to the first case of foo, thus,
-// one can fold the predicate and obtain the following state:
-// { A * foo(x1, x2, ..., xo) * B * C }
-//
-// For unfolding, if we are given the current state
-// { A * foo(x1, x2, ..., xo) * B * C }
-// ...then unfolding generates two branches, one with the following state:
-// { A * (P_1 * P_2 * ... * P_n) * B * C }
-// ...and the other with the following state:
-// { A * (Q_1 * Q_2 * ... * Q_m) * B * C }
-//
-// Normally, in most cases, Gillian can automatically fold and unfold as needed.
-// For clarity, however, this automatic fold/unfold has been disabled for some
-// exercises (including this one). You'll have to add these tactics yourself!
-// The syntax for folding and unfolding respectively is as follows:
-//   [[ fold P(x, y) ]];
-//   [[ unfold P(x, y) ]];
+// In many cases, Gillian can automatically fold and unfold as needed.
+// While you're getting to grips with Gillian, you'll have to fold and unfold
+// predicates yourself, by applying tactics like so:
+//     [[ fold P(x, y) ]];
+//     [[ unfold P(x, y) ]];
 //
 // Try adding folds and unfolds to make this function verify!
 //
-// If you get stuck with verifing a function, sometimes hints are in the 
-// 'hints' folder
+// Note: If you get stuck on an exercise, you might be able to find a hint in
+// the 'hints' folder.
 
-predicate list(+x, alpha) {
-    (x == null) * (alpha == nil);
-    (x -> #v, #z) * list(#z, #beta) * (alpha == #v::#beta)
+// === DON'T EDIT THIS ===
+
+@config manual_fold : true
+
+predicate list(+x, vs) {
+    (x == null) * (vs == nil);
+    (x -b> #v, #z) * list(#z, #vss) * (vs == #v::#vss)
 }
 
-{ (x == #x) * list(#x, #alpha) }
+// === EDIT BELOW HERE ===
+
+{ (x == #x) * list(#x, #vs) }
 function llen(x) {
     if (x == null) {
         n := 0
@@ -57,4 +40,4 @@ function llen(x) {
     };
     return n
 }
-{ list(#x, #alpha) * (ret == len(#alpha)) }
+{ list(#x, #vs) * (ret == len(#vs)) }

@@ -1,26 +1,30 @@
-@config manual_fold : true
-
 // === Function calls ===
+// As a follow-up from the last exercise, use fold/unfold to make list_prepend
+// verify.
 //
-// As a follow-up from the last exercise, use fold/unfold to make list_prepend verify.
+// Function calls work based on the consume/produce paradigm: within the
+// function body, whenever there is a function call to f, the relevant part of
+// the state that matches the precondition of f is "consumed" -- and the
+// postcondition of f is produced.
+// 
+//     { P(x) * F } y := f(x) { Q(y) * F }	
 //
-// Function calls work based on the consume/produce paradigm: within the function body,
-// whenever there is a function call to f, the relevant part of the state that matches the 
-// precondition of f is "consumed" -- and the postcondition of f is produced.
+//                 given	   
+//  
+//     { P(n) } f(n) { ...; return r } { Q(r) }		     
 // 
-//  { P(x) * F }			{ P(n) }
-//    y := f(x) 	given		  f(n) { ...; return r }
-//  { Q(y) * F }			{ Q(r) }
-// 
-// In short, only the relevant parts of the assertion will be appropriately replaced
-// in a function call given the function's specification.
+// In short, only the relevant parts of the assertion will be appropriately
+// replaced in a function call given the function's specification.
+
+// === DON'T EDIT THIS ===
+
+@config manual_fold : true
 
 predicate list(+x, vs) {
     (x == null) * (vs == nil);
-    (x -> #v, #z) * list(#z, #vss) * (vs == #v::#vss)
+    (x -b> #v, #z) * list(#z, #vss) * (vs == #v::#vss)
 }
 
-// TODO maybe make this function be "admitted"? Can't show the solution.
 { (v == #v) }
 function list_allocate_node(v){
   t := new(2);
@@ -30,6 +34,8 @@ function list_allocate_node(v){
   return t
 }
 { list(ret, [ #v ]) }
+
+// === EDIT BELOW HERE ===
 
 { (x == #x) * (k == #k) * list(#x, #vs) }
 function list_prepend(x, k){

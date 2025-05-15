@@ -1,23 +1,28 @@
-@config manual_fold : true
-
-// === Dealing with Ifs and Recursion ===
+// ========== 03 - If-statements and recursive calls ==========
 //
-// Using the same predicate, solve the following functions that deal with recursively going into the list.
+// Using the same predicate, solve the following functions that deal with
+// recursively going into the list.
 //
 // Note that if we are given a function specification of the form
-//   { P(n) }
+//     { P(n) }
 //     f(n) { ...; return r }
-//   { Q(n) }
-// ... then this function specification is in some function specification context C.
-// Every time a function call is made to f, Gillian checks whether the function specification is in C
-// and proceeds with the consume/produce operation. 
-// For recursive calls, note that the specification of the function you are trying to verify is already
-// included in the function specification context C. This allows you to verify recursive functions without
-// any issues.
+//     { Q(n) }
+// ... then this function specification is in some function specification
+// context C.
+//
+// Every time a function call is made to f, Gillian checks whether the function
+// specification is in C and proceeds with the consume/produce operation.
+// For recursive calls, note that the specification of the function you are
+// trying to verify is already included in the function specification context C.
+// This allows you to verify recursive functions without any issues.
+
+// === DON'T EDIT THIS ===
+
+@config manual_fold : true
 
 predicate list(+x, vs) {
     (x == null) * (vs == nil);
-    (x -> #v, #z) * list(#z, #vss) * (vs == #v::#vss)
+    (x -b> #v, #z) * list(#z, #vss) * (vs == #v::#vss)
 }
 
 { (v == #v) }
@@ -29,6 +34,8 @@ function list_allocate_node(v){
   return t
 }
 { list(ret, [ #v ]) }
+
+// === EDIT BELOW HERE ===
 
 {(x == #x) * (y == #y) * list(#x, #xs) * list(#y, #ys) }
 function list_concat(x, y) {

@@ -1,6 +1,6 @@
 {
   "name": "Gillian Debugging lab",
-  "image": "ghcr.io/gillianplatform/gillian:2025-05-13",
+  "image": "ghcr.io/gillianplatform/gillian:2025-05-15",
   "customizations": {
     "vscode": {
       "extensions": [

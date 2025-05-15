@@ -2,6 +2,7 @@
   "gillian.runMode": "installed",
   "gillian.wisl.showSymbolicDebugButton": false,
   "gillian.wisl.commandLineArguments": [
-    "--procs-only"
+    "--procs-only",
+    "--usage-logs"
   ]
 }

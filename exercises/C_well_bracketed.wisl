@@ -1,36 +1,38 @@
-@config manual_fold : false
-
-// === Exercise C : Well-bracketed function ===
+// ========== Exercise C: Well-bracketed ==========
 //
-// Having worked with singly-linked lists, it is now time to work with an application of it. 
+// Now that you're familiar with verifying singly-linked list algorithms, let's
+// look at an application of them.
 //
-// The problem is as follows: given a string s, can we write a function that checks that it is 
-// well-bracketed? 
-//
+// Given a string, can we write a function to check that it's well-bracketed? 
 // Well-bracketed in this case means: 
+//   1. The number of opening brackets must match the number of closing brackets
+//      (of the same type)
+//   2. Whenever there is an opening bracket, a closing bracket must match it
+//      later in the string
+//   3. The order of opening brackets must match the order of closing brackets;
+//      for example, "[<]>" is not well-bracketed, while "[<>]" is
+//   4. Non-bracket characters are ignored
 //
-// 1. The number of open brackets must match the number of close brackets (of the same type)
-// 2. Whenever there is an open bracket, there must be later on a close bracket that matches it
-// 3. The order of open brackets must match the order of close brackets. For example,
-// "[<]>" is not well-bracketed, while "[<>]" is. 
-// 4. Normal characters are ignored. 
+// To give some examples:
+//   - "[<a>]" is well-bracketed
+//   - "[]<>>" is *not* well-bracketed
+//   - "<ab[c]e" is *not* well-bracketed
 //
-// To give some clear examples:
-// "[<a>]" is well-bracketed
-// "[]<>>" is not well-bracketed
-// “<ab[c]e” is not well-bracketed
-//
-// For the sake of simplicity, we assume that the only brackets that we care for are "[]" and "<>".
+// For this exercise, we consider two types of brackets: "[]" and "<>".
 // 
-// parameter s in the functions is treated as a stack implemented as a singly-linked list.
-// Look over the function wellBr and wellBrhelper in which the correct code is provided for you.
+// Look over the functions wellBr and wellBr_helper; these use a singly-linked
+// as a stack to track which opening brackets not yet been matched.
 //
-// The goal for you is to provide the predicate wbs, which given the string list a and the stack b, 
-// the predicate should be able to deduce the parameter r which indicates whether list a is well-bracketed
-// or not.
+// Your task is to define the predicate 'wbs', which, given a list of strings
+// 'a' (representing the individual characters of a string) and the stack 'b',
+// deduces whether the string represented by 'a' is well-bracketed.
 //
 // The predicates ob, cb, nb are provided to you, which indicate whether the character c is an open bracket,
 // close bracket, or neither respectively.
+
+// === DON'T EDIT THIS ===
+
+@config manual_fold : false
 
 predicate list(+x, vs) {
   (x == null) * (vs == []);
@@ -42,6 +44,8 @@ predicate list(+x, vs) {
 function list_allocate_node(v) {
   t := new(2);
   [t] := v;
+  [[ fold list(null, []) ]];
+  [[ fold list(t, [ #v ]) ]];
   return t
 }
 { list(ret, [ #v ]) }
@@ -49,13 +53,16 @@ function list_allocate_node(v) {
 { (x == #x) * (k == #k) * list(#x, #vs) }
 function list_push(x, k) {
   z := list_allocate_node(k);
+  [[ unfold list(z, [ #k ]) ]];
   [z + 1] := x;
+  [[ fold list(z, #k :: #vs) ]];
   return z
 }
 { list(ret, #k :: #vs) }
 
 { (x == #x) * (x != null) * list(#x, #k :: #vs) }
 function list_pop(x) {
+  [[ unfold list(#x, #k :: #vs) ]];
   r := new(2);
   k := [x];
   z := [x + 1];
@@ -64,28 +71,6 @@ function list_pop(x) {
   return r
 }
 { list(#z, #vs) * (ret == #r) * #r -b> #k, #z }
-
-// Well bracketed predicates
-
-predicate ob(+c : String) {
-  ((c == "<") || (c == "["))
-}
-
-predicate cb(+c : String) {
-  ((c == ">") || (c == "]"))
-}
-
-predicate nb(+c : String) {
-  ((c != "<") /\ (c != ">") /\ (c != "[") /\ (c != "]"))
-}
-
-predicate wbs(+a, +b, r : Bool) {
-  (a == []) * (b == []) * (r == true)
-}
-
-predicate wb(+a, r : Bool) {
-  wbs(a, [], r)
-}
 
 { (x == #x) * (s == #s) * list(#x, #a) * list(#s, #b) * wbs(#a, #b, #r) }
 function wellBr_helper(x, s) {
@@ -130,3 +115,32 @@ function wellBr(x) {
   return r
 }
 { list(#x, #a) * wb(#a, #r) * (ret == #r) }
+
+predicate wb(+a, r : Bool) {
+  wbs(a, [], r)
+}
+
+predicate openBracket(+c : String) {
+  ((c == "<") || (c == "["))
+}
+
+predicate closeBracket(+c : String) {
+  ((c == ">") || (c == "]"))
+}
+
+predicate nonBracket(+c : String) {
+  ((c != "<") /\ (c != ">") /\ (c != "[") /\ (c != "]"))
+}
+
+// === EDIT BELOW HERE ===
+
+predicate wbs(+a, +b, r : Bool) {
+//-
+//-
+//-
+//-
+//-
+//-
+  // Complete this predicate!
+  (r == true)
+}

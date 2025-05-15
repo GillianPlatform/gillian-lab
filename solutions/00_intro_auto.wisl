@@ -1,21 +1,22 @@
 @config manual_fold : false
 
-// === INTRO ===
+// ========== 00 - Intro ==========
 //
-// In this exercise, let's take a look at Gillian's 'matching' process.
-// Whenever Gillian needs to check that the current state satisfies some
-// condition (e.g. a compositional function call, checking the postcondition),
-// it will perform a 'match'.
-// To illustrate this, try running the debugger and stepping to the recursive
-// call to `llen()`; Gillian performs a match to check that the precondition for
-// the recursive call holds (and then know what to consume from the state).
-// In this case, it checks some basic properties (e.g. #vs is a list) and
-// most notably, that the list predicate holds.
+// Welcome to the Gillian lab! These exercises aim to introduce you to Gillian
+// and its underlying Compositional Symbolic Execution principles.
+//
+// You may have noticed that Gillian's language server is showing that llen is
+// failing verification. Try using the debugger (by clicking 'Verify llen') to
+// explore the verification trace, and figure out how to fix the program.
+
+// === DON'T EDIT THIS ===
 
 predicate list(+x, vs) {
     (x == null) * (vs == nil);
-    (x -> #v, #z) * list(#z, #vss) * (vs == #v::#vss)
+    (x -b> #v, #z) * list(#z, #vss) * (vs == #v::#vss)
 }
+
+// === EDIT BELOW HERE ===
 
 { (x == #x) * list(#x, #vs) }
 function llen(x) {
