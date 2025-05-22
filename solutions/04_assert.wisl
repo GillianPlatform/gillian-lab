@@ -26,6 +26,7 @@
 // Knowing this, try using assert while verifying list_reverse and find_min.
 
 // === DON'T EDIT THIS ===
+//#region
 
 @config manual_fold : true
 
@@ -73,6 +74,7 @@ predicate min(+vs, v : Int) {
   (vs == #v :: #vs) * (#v <= #min) * min(#vs, #min) * (v == #v)
 }
 
+//#endregion
 // === EDIT BELOW HERE ===
 
 { (x == #x) *  list(#x, #vs) }
@@ -106,7 +108,7 @@ function find_min(x) {
     [[ fold intList(null, []) ]]
   } else {
     [[ fold intList(next, #vss) ]];
-    r := find_min(next, val);
+    r := find_min(next);
     if (val <= r) {
       r := val
     } else {

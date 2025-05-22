@@ -8,7 +8,7 @@
 //   3. A right subtree (possibly null)
 // All keys in the left subtree must be less than the root key, and all keys in
 // the right subtree must be greater than the root key. This implies that the
-//tree contains no duplicate keys.
+// tree contains no duplicate keys.
 //
 // === Predicates ===
 // Before setting up the binary search tree predicate, we must be able to
@@ -22,6 +22,7 @@
 // BSTCopy, BSTSearch and BSTFindMin.
 
 // === DON'T EDIT THIS ===
+//#region
 
 @config manual_fold : false
 
@@ -161,6 +162,12 @@ lemma list_member_lt {
       (a < k) * list_lt(vs, k) |- list_member(vs, a, false) * list_lt(vs, k)
 }
 
+lemma list_member_elem_neq {
+  statement:
+    forall vs, a, b.
+      list_member(vs, a, false) * list_member(vs, b, true) |- list_member(vs, a, false) * list_member(vs, b, true) * (a != b)
+}
+
 { (v == #v) * (v : Int) }
 function BSTAllocateLeaf(v) {
   t := new(3);
@@ -169,6 +176,7 @@ function BSTAllocateLeaf(v) {
 }
 { bst(ret, [#v]) }
 
+//#endregion
 // === EDIT BELOW HERE ===
 
 // 1. Copying a binary search tree (MEDIUM)
@@ -186,7 +194,6 @@ function BSTCopy(x) {
     t := BSTCopy(t);
     [y + 2] := t;
     // Hints 1 & 2 may help here
-    [[ fold bst(y, #vs) ]]
   } else {
     y := null
   };

@@ -27,10 +27,11 @@
 // 'a' (representing the individual characters of a string) and the stack 'b',
 // deduces whether the string represented by 'a' is well-bracketed.
 //
-// The predicates ob, cb, nb are provided to you, which indicate whether the character c is an open bracket,
+// The predicates openBracket, closeBracket, nonBracket are provided to you, which indicate whether the character c is an open bracket,
 // close bracket, or neither respectively.
 
 // === DON'T EDIT THIS ===
+//#region
 
 @config manual_fold : false
 
@@ -132,6 +133,7 @@ predicate nonBracket(+c : String) {
   ((c != "<") /\ (c != ">") /\ (c != "[") /\ (c != "]"))
 }
 
+//#endregion
 // === EDIT BELOW HERE ===
 
 predicate wbs(+a, +b, r : Bool) {

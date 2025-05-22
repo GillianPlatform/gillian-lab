@@ -9,6 +9,7 @@
 // If all goes well, list_remove_strong shouldn't need any tactics to verify!
 
 // === DON'T EDIT THIS ===
+//#region
 
 @config manual_fold : false
 
@@ -17,6 +18,7 @@ predicate list(+x, vs) {
   (x -b> #v, #z) * list(#z, #vss) * (vs == #v :: #vss)
 }
 
+//#endregion
 // === EDIT BELOW HERE ===
 
 predicate list_without(+xs, +v, ys) {

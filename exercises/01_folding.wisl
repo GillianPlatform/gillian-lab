@@ -3,6 +3,7 @@
 // Add fold and/or unfold tactics to make this function verify.
 
 // === DON'T EDIT THIS ===
+//#region
 
 @config manual_fold : true
 
@@ -11,6 +12,7 @@ predicate list(+x, vs) {
     (x -b> #v, #z) * list(#z, #vss) * (vs == #v::#vss)
 }
 
+//#endregion
 // === EDIT BELOW HERE ===
 
 { (v == #v) }

@@ -2,7 +2,7 @@
 //
 // We want to transform a list into a set. We can represent a set using a
 // set_list predicate, which ensures that each element doesn't appear in the
-// rest of the list (using the l_member predicate).
+// rest of the list (using the list_member predicate).
 //
 // Try getting remove_duplicates to verify.
 //
@@ -11,6 +11,7 @@
 // verifying it.
 
 // === DON'T EDIT THIS ===
+//#region
 
 @config manual_fold : false
 
@@ -19,45 +20,45 @@ predicate list(+x, vs) {
   (x -b> #v, #z) * list(#z, #vs) * (vs == #v :: #vs)
 }
 
-predicate l_member(+vs, +v, r : Bool){
+predicate list_member(+vs, +v, r : Bool){
   (vs == []) * (r == false);
-  (vs == v :: #ws) * (r == true) * l_member(#ws, v, #mem);
-  (vs == #v :: #ws) * (#v != v) * l_member(#ws, v, r)
+  (vs == v :: #ws) * (r == true);
+  (vs == #v :: #ws) * (#v != v) * list_member(#ws, v, r)
 }
 
 predicate set_list(+x, vs) {
   (vs == []) * (x == null);
   (x -b> #v, #z) * set_list(#z, #vs) * (vs == #v :: #vs)
-    * l_member(#vs, #v, false)
+    * list_member(#vs, #v, false)
 }
 
 predicate contains_all(+xs, +vs) {
   (xs == []);
-  (xs == #x :: #xs) * l_member(vs, #x, true) * contains_all(#xs, vs)
+  (xs == #x :: #xs) * list_member(vs, #x, true) * contains_all(#xs, vs)
 }
 
 lemma list_member_create {
   statement:
     forall x, k, vs.
-      list(x, vs) |- list(x, vs) * l_member(vs, k, #r)
+      list(x, vs) |- list(x, vs) * list_member(vs, k, #r)
 }
 
 lemma set_list_member_create {
   statement:
     forall x, k, vs.
-      set_list(x, vs) |- set_list(x, vs) * l_member(vs, k, #r)
+      set_list(x, vs) |- set_list(x, vs) * list_member(vs, k, #r)
 }
 
 lemma list_member_duplicate {
   statement:
     forall vs, k, r.
-      l_member(vs, k, r) |- l_member(vs, k, r) * l_member(vs, k, r)
+      list_member(vs, k, r) |- list_member(vs, k, r) * list_member(vs, k, r)
 }
 
 lemma list_member_true {
   statement:
     forall vs, k, v.
-      l_member(vs, k, true) |- l_member(v :: vs, k, true)
+      list_member(vs, k, true) |- list_member(v :: vs, k, true)
 }
 
 lemma contains_all_prepend {
@@ -74,19 +75,19 @@ function set_list_allocate_node(v) {
 }
 { set_list(ret, [ #v ]) }
 
-{ (x == #x) * (k == #k) *  set_list(#x, #vs) * l_member(#vs, #k, false) }
+{ (x == #x) * (k == #k) *  set_list(#x, #vs) * list_member(#vs, #k, false) }
 function set_list_prepend(x, k){
     z := set_list_allocate_node(k);
     [z + 1] := x;
     [[ apply list_member_duplicate(#vs, #k, false)]];
     return z
 }
-{ set_list(ret, #k :: #vs) * l_member(#k :: #vs, #k, true) }
+{ set_list(ret, #k :: #vs) * list_member(#k :: #vs, #k, true) }
 
-{ (x == #x) * (k == #k) * set_list(#x, #vs) * l_member(#vs, #k, #r) }
+{ (x == #x) * (k == #k) * set_list(#x, #vs) * list_member(#vs, #k, #r) }
 function set_list_member(x, k){
   found := false;
-  [[ unfold l_member(#vs, k, #r) ]];
+  [[ unfold list_member(#vs, k, #r) ]];
   if (x == null){
     skip
   } else {
@@ -100,8 +101,9 @@ function set_list_member(x, k){
   };
   return found
 }
-{ set_list(#x, #vs) * l_member(#vs, #k, #r) * (ret == #r) }
+{ set_list(#x, #vs) * list_member(#vs, #k, #r) * (ret == #r) }
 
+//#endregion
 // === EDIT BELOW HERE ===
 
 { (x == #x) * list(x, #vs) }
@@ -116,7 +118,7 @@ function remove_duplicates(x) {
     [[ assert {bind: #v, #vss} (#vs == #v :: #vss) ]];
     [[ apply set_list_member_create(r, v, #s) ]];
     mem := set_list_member(r, v);
-    [[ apply contains_all_prepend(#s, #vss, #v)]];
+    [[ apply contains_all_prepend(#s, #vss, #v) ]];
     if (mem) {
       skip
     } else {

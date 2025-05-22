@@ -27,6 +27,7 @@
 // the verification process more involved.
 
 // === DON'T EDIT THIS ===
+//#region
 
 @config manual_fold : false
 
@@ -99,6 +100,7 @@ lemma dlseg_concat {
         |- dlsegl(x_a, y_b, v_b, w_a, (vs_a @ vs_b))
 }
 
+//#endregion
 // === EDIT BELOW HERE ===
 
 { (x_a == #x_a) * (v_a == #v_a) * (x_b == #x_b) * (v_b == #v_b)

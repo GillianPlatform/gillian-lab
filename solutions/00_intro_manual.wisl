@@ -19,6 +19,7 @@
 // the 'hints' folder.
 
 // === DON'T EDIT THIS ===
+//#region
 
 @config manual_fold : true
 
@@ -27,6 +28,7 @@ predicate list(+x, vs) {
     (x -b> #v, #z) * list(#z, #vss) * (vs == #v::#vss)
 }
 
+//#endregion
 // === EDIT BELOW HERE ===
 
 { (x == #x) * list(#x, #vs) }

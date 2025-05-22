@@ -1,6 +1,6 @@
 // ========== 05 - Applying lemmas ==========
 //
-// In this exercise, we'll demonstrate the final tactic you'll need: apply.
+// In this exercise, we'll demonstrate the final tactic you'll need for this lab: apply.
 //
 // You may find yourself applying the same sequence of tactics in multiple
 // places. You may also need to obtain facts inductively, which can't be done
@@ -32,11 +32,14 @@
 // (t -b> v, null) (established by the previous two instructions), and produces
 // the completed predicate. 
 //
-// Try verifying list_get and list_member using the provided lemmas.
+// Try verifying list_get and list_member_func using the provided lemmas.
 //
-// Bonus challenge: can you verify list_get without using the lemma?
+// Bonus challenge 1: can you verify list_get without using the lemma?
+// Bonus challenge 2: Is the lemma for list_member_func actually necessary? 
+//                    Can we remove it by modifying something else?
 
 // === DON'T EDIT THIS ===
+//#region
 
 @config manual_fold : true
 
@@ -64,37 +67,37 @@ predicate list(+x, vs) {
 }
 
 predicate list_search(+vs, +i, v) {
-  (vs == #v :: #vs) * (i == 1) * (v == #v);
-  (vs == #v :: #vs) * (i != 1) * (i < len(vs)) * list_search(#vs, i - 1, v)
+  (vs == #v :: #vs) * (i == 0) * (v == #v);
+  (vs == #v :: #vs) * (i != 0) * (i > 0) * (i < len(vs)) * list_search(#vs, i - 1, v)
 }
 
 lemma search_not_null {
   statement:
     forall x, vs, i, r.
-      list(x, vs) * list_search(vs, i, r) * (i != 0) |- list(x, vs)
-      * list_search(vs, i, r) * (x != null)
+      list(x, vs) * list_search(vs, i - 1, r) |- list(x, vs) * list_search(vs, i - 1, r) * (x != null)
 }
 
-predicate l_member(+vs, +v, r : Bool){
+predicate list_member(+vs, +v, r : Bool){
   (vs == []) * (r == false);
-  (vs == v :: #ws) * (r == true) * l_member(#ws, v, #mem);
-  (vs == #v :: #ws) * (! (#v == v)) * l_member(#ws, v, r)
+  (vs == v :: #ws) * (r == true) * list_member(#ws, v, #mem);
+  (vs == #v :: #ws) * (#v != v) * list_member(#ws, v, r)
 }
 
 lemma list_member_create {
   statement:
     forall x, k, vs.
-      list(x, vs) |- list(x, vs) * l_member(vs, k, #r)
+      list(x, vs) |- list(x, vs) * list_member(vs, k, #r)
 }
 
+//#endregion
 // === EDIT BELOW HERE ===
 
 { (x == #x) * (i == #i) * (x != null) * list(x, #vs)
-  * list_search(#vs, #i, #r) }
+  * list_search(#vs, #i, #r) * (i >= 0) }
 function list_get(x, i) {
   v := [x];
   next := [x + 1];
-  if (i == 1) {
+  if (i == 0) {
     r := v
   } else {
     i := i - 1;
@@ -105,7 +108,7 @@ function list_get(x, i) {
 { list(#x, #vs) * list_search(#vs, #i, #r) * (ret == #r) }
 
 { (x == #x) * (k == #k) * list(#x, #vs) }
-function list_member(x, k){
+function list_member_func(x, k){
   found := false;
   if (x == null){
     skip
@@ -115,9 +118,9 @@ function list_member(x, k){
     if (v == k){
       found := true;
     } else {
-      found := list_member(t, k)
+      found := list_member_func(t, k)
     }
   };
   return found
 }
-{ list(#x, #vs) * l_member(#vs, #k, #r) * (ret == #r) }
+{ list(#x, #vs) * list_member(#vs, #k, #r) * (ret == #r) }

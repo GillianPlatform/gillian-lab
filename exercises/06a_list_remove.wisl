@@ -6,6 +6,7 @@
 // Using the list membership predicate, try to verify the following function.
 
 // === DON'T EDIT THIS ===
+//#region
 
 @config manual_fold : true
 
@@ -20,6 +21,7 @@ predicate l_member(+vs, +v, r : Bool) {
   (vs == #v :: #ws) * (#v != v) * l_member(#ws, v, r)
 }
 
+//#endregion
 // === EDIT BELOW HERE ===
 
 { (x == #x) * (k == #k) * list(#x, #vs) }
