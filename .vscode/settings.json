@@ -5,7 +5,7 @@
     "--procs-only",
     "--loop-hack",
     "--usage-logs",
-    "--usage-logs-ref=c2af6b61c22b4e0ee38d551a5b2c4d2ac97a073c",
+    "--usage-logs-ref=f0bcde931f53ac2ae9c88c60f1ee21e078345af6",
     "--usage-logs-file=${workspaceFolder}/gillian_usage_log.jsonl"
   ]
 }
