@@ -1,4 +1,0 @@
-Hint 4:
-
-Consider how the #vs looks at this point.
-What can you say about t ∈ #vs?

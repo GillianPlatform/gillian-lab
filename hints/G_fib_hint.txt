@@ -1,4 +1,0 @@
-Hint:
-
-Here, you need to consume both fib(n-2) and fib(n-1) predicates to get the
-fib(n) predicates, but these are pure so you should be able to duplicate them!

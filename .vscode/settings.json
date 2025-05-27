@@ -3,6 +3,9 @@
   "gillian.wisl.showSymbolicDebugButton": false,
   "gillian.wisl.commandLineArguments": [
     "--procs-only",
-    "--usage-logs"
+    "--loop-hack",
+    "--usage-logs",
+    "--usage-logs-ref=c2af6b61c22b4e0ee38d551a5b2c4d2ac97a073c",
+    "--usage-logs-file=${workspaceFolder}/gillian_usage_log.jsonl"
   ]
 }

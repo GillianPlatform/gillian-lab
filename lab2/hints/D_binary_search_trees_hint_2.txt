@@ -1,0 +1,6 @@
+Hint 2:
+
+To duplicate the pure predicates, we need to
+be able to refer to the logical variables.
+The [[ assert {bind: ...} ... ]] tactic will
+come in handy.

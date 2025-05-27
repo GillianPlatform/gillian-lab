@@ -1,5 +1,0 @@
-Hint 7:
-
-x <= x1 for all x1 ∈ S1 /\ 
-x <  x2 for all x2 ∈ S2 ==> 
-x <= x3 for all x3 ∈ S1 ∪ S2

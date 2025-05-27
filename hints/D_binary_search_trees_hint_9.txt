@@ -1,5 +1,0 @@
-Hint 9:
-
-min <= s for all s ∈ S /\ 
-k >  s for all s ∈ S ==>
-min <= s for all s ∈ {k} ∪ S 

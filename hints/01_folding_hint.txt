@@ -1,3 +1,0 @@
-Hint:
-
-You should fold the empty list case.

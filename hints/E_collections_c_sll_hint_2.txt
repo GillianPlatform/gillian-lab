@@ -1,5 +1,0 @@
-Hint 2:
-
-If you concatenated the lseg and sll predicate before entering the loop,
-you now need to 'undo' the concatenation so that you can fold back towards
-the cc_sll predicate.

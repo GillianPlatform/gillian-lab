@@ -1,5 +1,0 @@
-Hint 3:
-
-You may find the [[ assert {bind: ... } ]]
-tactic helpful to label the logical 
-variables.
