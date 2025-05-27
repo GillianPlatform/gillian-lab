@@ -1,3 +1,3 @@
-# Gillian Lab Exercises
+# Gillian lab @ SSFT 25
 
-This repo contains some exercises for a lab on Gillian.
+See [here](https://gillianplatform.github.io/sphinx/labs/ssft25/index.html) for more information.

@@ -1,0 +1,6 @@
+Hint 1:
+
+Note that folding the bst predicate consumes
+the pure predicates. To ensure we can also
+fold the copied binary search tree, we need
+to duplicate the remaining pure predicates.

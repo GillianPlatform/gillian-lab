@@ -1,0 +1,5 @@
+Hint 5:
+
+if a < t and list_lt(vs, t), what does this
+say about a ∈ vs? Like what about the case
+where a > t and list_gt(vs, t)?
