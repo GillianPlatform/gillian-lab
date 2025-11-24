@@ -6,7 +6,7 @@
     "--procs-only",
     "--loop-hack",
     "--usage-logs",
-    "--usage-logs-ref=eb44362856d7263a691bdc08a9068b6926a421d9",
+    "--usage-logs-ref=92ae49174bf693f2e785a2ed492d84e34fb15627",
     "--usage-logs-file=${workspaceFolder}/gillian_usage_log.jsonl"
   ],
   "gillian.wisl.environmentVariables": {
