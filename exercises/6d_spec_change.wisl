@@ -28,7 +28,6 @@ function list_allocate_node(v){
 
 //#endregion  === EDIT BELOW HERE ===
 
-//-
 { (x == #x) * (k == #k) * list(#x, #vs) }
 function list_remove_copy(x, k) {
   if (x == null) {
