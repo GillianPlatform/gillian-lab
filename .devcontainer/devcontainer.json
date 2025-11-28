@@ -1,0 +1,11 @@
+{
+    "name": "Gillian lab",
+    "image": "ghcr.io/gillianplatform/wisl:student25",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "${containerWorkspaceFolder}/.devcontainer/gillianplatform.gillian-0.0.2.vsix"
+            ]
+        }
+    }
+}

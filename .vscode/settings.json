@@ -1,15 +1,8 @@
 {
   "gillian.runMode": "installed",
-  "gillian.binDirectory": "/vol/rr/gillian/bin",
   "gillian.wisl.showSymbolicDebugButton": false,
   "gillian.wisl.commandLineArguments": [
     "--procs-only",
-    "--loop-hack",
-    "--usage-logs",
-    "--usage-logs-ref=92ae49174bf693f2e785a2ed492d84e34fb15627",
-    "--usage-logs-file=${workspaceFolder}/gillian_usage_log.jsonl"
-  ],
-  "gillian.wisl.environmentVariables": {
-    "PATH": "/vol/rr/z3-4.13.3/bin"
-  },
+    "--loop-hack"
+  ]
 }
