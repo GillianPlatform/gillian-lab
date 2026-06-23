@@ -1,6 +1,6 @@
 {
     "name": "Gillian lab",
-    "image": "ghcr.io/gillianplatform/gillian-lab:nightly",
+    "image": "ghcr.io/gillianplatform/gillian-lab:oplss26",
     "customizations": {
         "vscode": {
             "extensions": [
