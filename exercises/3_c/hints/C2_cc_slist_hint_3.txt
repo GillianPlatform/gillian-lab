@@ -1,0 +1,4 @@
+Hint 3:
+
+Think carefully about what shape we need the lists to be in to create the
+required predicates for the post-condition, and apply lemmas thusly.

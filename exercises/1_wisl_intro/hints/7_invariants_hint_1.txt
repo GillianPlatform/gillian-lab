@@ -1,0 +1,5 @@
+Hint 1:
+
+List length iter hint 1:
+Remember that it is in manual mode, so you don't have the base case of
+listseg.

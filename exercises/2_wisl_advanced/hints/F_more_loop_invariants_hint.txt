@@ -1,0 +1,5 @@
+Hint:
+
+list_member_iter hint:
+After the while loop, you have the condition as a disjunction. You can
+separate it into two different cases with the conditional tactic.

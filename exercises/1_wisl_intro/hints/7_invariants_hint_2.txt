@@ -1,0 +1,8 @@
+Hint 2:
+
+List length iter hint 2:
+We are modifying y to be the next part of the list.
+In order to re-establish the loop invariant, we need to unpack list(y, #vs2)
+to get the right predicate, and append it to listseg(x, y, #vs1).
+However, we can't simply do it by folding and unfolding, so it is required
+To use a lemma.

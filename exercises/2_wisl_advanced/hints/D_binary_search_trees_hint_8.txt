@@ -1,0 +1,14 @@
+Hint 8:
+
+Currently, the structure of the tree at this
+state is as follows:
+    #k
+   /  \
+  l    r
+...where l != null, and #vsl is the list
+of elements in the subtree pointed by l.
+The recursive call to BSTFindMin(l) returns
+list_member(#vsl, min, true) and
+list_min(#vsl, min). What now remains
+is to show how min relates to #k and
+and the keys in the subtree pointed by r.

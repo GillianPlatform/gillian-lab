@@ -1,0 +1,4 @@
+Hint 1:
+
+The specificaiton is correct, and no tactics are needed.
+How can we be sure that we can represent the full list size?

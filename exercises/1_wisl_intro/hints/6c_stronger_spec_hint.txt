@@ -1,0 +1,7 @@
+Hint:
+
+Predicate hint: 
+The list before, say vs, and after the removal, say xs, are related
+by xs being exactly the same list, with the same order, but without k.
+There should be three cases, and you should go through inductively
+both lists, checking whether their elements are the same.

@@ -1,0 +1,4 @@
+Hint 1:
+
+It looks like Gillian is having a lot of trouble figuring out how to access
+the memory at x->tail, and tries unfolding the wrong predicates.
