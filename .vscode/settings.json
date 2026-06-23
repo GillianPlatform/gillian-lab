@@ -2,8 +2,5 @@
   "gillian.runMode": "installed",
   "gillian.binDirectory": "/usr/local/bin",
   "gillian.wisl.showSymbolicDebugButton": false,
-  "gillian.wisl.commandLineArguments": [
-    "--procs-only",
-    "--loop-hack"
-  ]
+  "gillian.wisl.commandLineArguments": "--procs-only --loop-hack"
 }
