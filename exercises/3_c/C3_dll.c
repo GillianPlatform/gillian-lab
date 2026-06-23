@@ -37,8 +37,8 @@ pred DLL(+x, alpha) {
 }
 */
 
-DLL* listConcat(DLL *x, DLL *y)
-DLL* listPrepend(DLL *x, int v)
+DLL* listConcat(DLL *x, DLL *y);
+DLL* listPrepend(DLL *x, int v);
 
 //#endregion  === EDIT BELOW HERE ===
 
