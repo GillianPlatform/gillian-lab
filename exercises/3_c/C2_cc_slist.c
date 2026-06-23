@@ -90,58 +90,51 @@ lemma lseg_concat(p, q, r, alpha, gamma) {
   ensures:  cc_sll(#x, #alpha @ [ #v ])
 } */
 void cc_slist_add_last(CC_SList *x, int v) {
-  SNode *node = calloc(1, sizeof(SNode));
+    SNode *node = calloc(1, sizeof(SNode));
 
-  node->data = v;
+    node->data = v;
 
-  if (x->size == 0) {
-    x->head = node;
-    x->tail = node;
-  } else {
-    //? 
-    //? Can you tell it what to unfold? You might need a binding assert to give names
-    //? to the predicate's parameters.
-    //? 
-    //? Try doing it in just one unfold!
-    x->tail->next = node;
-    x->tail = node;
-  }
-  x->size++;
+    if (x->size == 0) {
+        x->head = node;
+        x->tail = node;
+    } else {
+        x->tail->next = node;
+        x->tail = node;
+    }
+    x->size++;
 }
 
 
 /*@ spec cc_slist_splice(x, y) {
-  requires: (x == #x) * cc_sll(#x, #alpha)
-          * (y == #y) * cc_sll(#y, #beta)
-          * i__is_size_t((len #alpha) + (len #beta))
+  requires: (x == #x) * cc_sll(#x, #alpha) *
+            (y == #y) * cc_sll(#y, #beta) *
+            i__is_size_t((len #alpha) + (len #beta))
   ensures:  cc_sll(#x, #alpha @ #beta) * cc_sll(#y, [])
 } */
 void cc_slist_splice(CC_SList *x, CC_SList *y) {
-  if (y->size == 0)
-    return;
+    if (y->size == 0)
+        return;
 
-  if (x->size == 0) {
-    x->head = y->head;
-    x->tail = y->tail;
-  } else {
-    __GILLIAN(
-      "assert [[bind #ah, #at, #bh, #xh, #xt, #yh, #yt]]"
-        "(#alpha == #ah @ [ #at ])"
-        "* (#beta == #bh @ [ #bt ])"
-        "* (#x -m> struct cc_slist_s { #xsz; #xh; #xt })"
-        "* (#y -m> struct cc_slist_s { #ysz; #yh; #yt })"
-    );
-    __GILLIAN("unfold sll(#xt, [ #at ])");
-    x->tail->next = y->head;
-    x->tail = y->tail;
-    //? 
-    //? Manual folding isn't required, but it might help to show you what's out of place.
-    __GILLIAN("apply lseg_append(#xh, #xt, #ah, #at, #yh)");
-    __GILLIAN("apply lseg_concat(#xh, #yh, #yt, #alpha, #bh)");
-  }
-  x->size += y->size;
+    if (x->size == 0) {
+        x->head = y->head;
+        x->tail = y->tail;
+    } else {
+        __GILLIAN(
+          "assert [[bind #ah, #at, #bh, #xh, #xt, #yh, #yt]]"
+            "(#alpha == #ah @ [ #at ])"
+            "* (#beta == #bh @ [ #bt ])"
+            "* (#x -m> struct cc_slist_s { #xsz; #xh; #xt })"
+            "* (#y -m> struct cc_slist_s { #ysz; #yh; #yt })"
+        );
+        __GILLIAN("unfold sll(#xt, [ #at ])");
+        x->tail->next = y->head;
+        x->tail = y->tail;
+        __GILLIAN("apply lseg_append(#xh, #xt, #ah, #at, #yh)");
+        __GILLIAN("apply lseg_concat(#xh, #yh, #yt, #alpha, #bh)");
+    }
+    x->size += y->size;
 
-  y->head = NULL;
-  y->tail = NULL;
-  y->size = 0;
+    y->head = NULL;
+    y->tail = NULL;
+    y->size = 0;
 }

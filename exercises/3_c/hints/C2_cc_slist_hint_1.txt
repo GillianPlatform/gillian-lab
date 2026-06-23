@@ -2,3 +2,8 @@ Hint 1:
 
 It looks like Gillian is having a lot of trouble figuring out how to access
 the memory at x->tail, and tries unfolding the wrong predicates.
+
+Can you tell it what to unfold? You might need a binding assert to give names
+to the predicate's parameters.
+
+Try doing it in just one unfold!

@@ -12,6 +12,7 @@
 // if so, let us know! You may want to refer to the dlsegl / dlsegr predicates
 // in WISL exercise B.
 
+//#region  === DON'T EDIT THIS ===
 
 #include <stdlib.h>
 
@@ -36,13 +37,18 @@ pred DLL(+x, alpha) {
 }
 */
 
+DLL* listConcat(DLL *x, DLL *y)
+DLL* listPrepend(DLL *x, int v)
+
+//#endregion  === EDIT BELOW HERE ===
+
 /*@ spec makeNode(x) {
   requires: (#x == x)
   ensures:  DLL(ret, [#x])
 } */
 DLL* makeNode(int x) {
-     // Implement me!
-     return NULL;
+    // Implement me!
+    return NULL;
 }
 
 /*@ spec listAppend(x, v) {
@@ -50,8 +56,8 @@ DLL* makeNode(int x) {
   ensures:  DLL(ret, #alpha @ [ #v ])
 } */
 DLL *listAppend(DLL *x, int v) {
-   // Implement me!
-   return NULL;
+    // Implement me!
+    return NULL;
 }
 
 /*@ spec listCopy(x) {
@@ -59,8 +65,8 @@ DLL *listAppend(DLL *x, int v) {
   ensures:  DLL(#x, #alpha) * DLL(ret, #alpha)
 } */
 DLL* listCopy(DLL *x) {
-     // Implement me!
-     return NULL;
+    // Implement me!
+    return NULL;
 }
 
 /*@ spec listPrepend(x, v) {

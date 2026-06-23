@@ -47,7 +47,7 @@ pred sll(+p, alpha) {
   requires: sll(#x, #alpha) * (x == #x)
   ensures:  sll(#x, #alpha) * (ret == len #alpha)
 } */
- int listLength(SLL *x) {
+int listLength(SLL *x) {
     if (x == NULL) {
         return 0;
     } else {
@@ -56,7 +56,7 @@ pred sll(+p, alpha) {
 }
 
 /*@ spec listPrepend(x, v) {
-   requires: (x == #x) * sll(#x, #alpha) * (v == #v)
+  requires: (x == #x) * sll(#x, #alpha) * (v == #v)
   ensures: sll(ret, #v::#alpha)
 } */
 SLL* listPrepend(SLL *x, int v) {
@@ -67,7 +67,7 @@ SLL* listPrepend(SLL *x, int v) {
 }
 
 /*@ spec listConcat(x, y) {
-   requires: (x == #x) * (y == #y) * sll(#x, #alpha) * sll(#y, #beta)
+  requires: (x == #x) * (y == #y) * sll(#x, #alpha) * sll(#y, #beta)
   ensures:  sll(ret, #alpha @ #beta)
 } */
 SLL* listConcat(SLL *x, SLL *y) {
