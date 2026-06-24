@@ -85,8 +85,8 @@ lemma lseg_concat(p, q, r, alpha, gamma) {
 //#endregion  === EDIT BELOW HERE ===
 
 /*@ spec cc_slist_add_last(x, v) {
-  requires: (x == #x) * cc_sll(#x, #alpha)
-          * (v == #v) * i__is_size_t(1 + len #alpha)
+  requires: (x == #x) * (v == #v) * cc_sll(#x, #alpha) *
+            i__is_size_t(1 + len #alpha)
   ensures:  cc_sll(#x, #alpha @ [ #v ])
 } */
 void cc_slist_add_last(CC_SList *x, int v) {
@@ -119,18 +119,9 @@ void cc_slist_splice(CC_SList *x, CC_SList *y) {
         x->head = y->head;
         x->tail = y->tail;
     } else {
-        __GILLIAN(
-          "assert [[bind #ah, #at, #bh, #xh, #xt, #yh, #yt]]"
-            "(#alpha == #ah @ [ #at ])"
-            "* (#beta == #bh @ [ #bt ])"
-            "* (#x -m> struct cc_slist_s { #xsz; #xh; #xt })"
-            "* (#y -m> struct cc_slist_s { #ysz; #yh; #yt })"
-        );
         __GILLIAN("unfold sll(#xt, [ #at ])");
         x->tail->next = y->head;
         x->tail = y->tail;
-        __GILLIAN("apply lseg_append(#xh, #xt, #ah, #at, #yh)");
-        __GILLIAN("apply lseg_concat(#xh, #yh, #yt, #alpha, #bh)");
     }
     x->size += y->size;
 
