@@ -62,14 +62,14 @@
 
 predicate sll(+x, alpha, delta) {
     // empty
-    (x == null) * (alpha == nil) * (delta == nil);
+    (x == null) * (alpha == []) * (delta == []);
     // non-empty
     (x -b> #v, #z) * sll(#z, #beta, #gamma) * (alpha == #v::#beta) *
     (delta == x::#gamma)
 }
 
 predicate lseg(+x, +y, alpha, delta) {
-  (x == y) * (alpha == nil) * (delta == nil);
+  (x == y) * (alpha == []) * (delta == []);
 
   (x -b> #v, #z) * (x != y) * lseg(#z, y, #beta, #gamma) *
   (alpha == #v::#beta) * (delta == x::#gamma)

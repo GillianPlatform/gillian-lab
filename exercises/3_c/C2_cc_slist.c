@@ -31,11 +31,11 @@ typedef struct cc_slist_s {
   (p -m> struct snode_s { #head; #tail } * (alpha == #head::#beta)) *
   sll(#tail,#beta) *
   i__is_size_t(len alpha);
-  (p == NULL) * (alpha == nil)
+  (p == NULL) * (alpha == [])
 }
 
 pred lseg(+p, +q, alpha) {
-    (p == q) * (alpha == nil);
+    (p == q) * (alpha == []);
 
     (p -m> struct snode_s { #head; #tail }) * (alpha == #head::#beta) *
     lseg(#tail, q, #beta) * i__is_size_t(len alpha)
@@ -75,7 +75,7 @@ lemma lseg_concat(p, q, r, alpha, gamma) {
       unfold lseg(#p, #q, #alpha)[[bind #head: #head,
                                         #tail: #tail,
                                         #beta: #beta]];
-      if (!(#alpha = nil)) {
+      if (!(#alpha = [])) {
         apply lseg_concat(#tail, #q, #r, #beta, #gamma);
         fold lseg(#p, #r, #alpha @ #gamma)
       }
@@ -119,7 +119,6 @@ void cc_slist_splice(CC_SList *x, CC_SList *y) {
         x->head = y->head;
         x->tail = y->tail;
     } else {
-        __GILLIAN("unfold sll(#xt, [ #at ])");
         x->tail->next = y->head;
         x->tail = y->tail;
     }

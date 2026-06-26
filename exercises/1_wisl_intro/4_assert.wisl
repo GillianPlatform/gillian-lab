@@ -30,7 +30,7 @@
 @config manual_fold : true
 
 predicate list(+x, vs) {
-  (x == null) * (vs == nil);
+  (x == null) * (vs == []);
   (x -b> #v, #z) * list(#z, #vss) * (vs == #v::#vss)
 }
 
@@ -61,7 +61,7 @@ function list_concat(x, y) {
 { list(ret,  #xs @ #ys) }
 
 predicate intList(+x, vs) {
-  (x == null) * (vs == nil);
+  (x == null) * (vs == []);
   (x -b> #v, #z) * (#v : Int) * intList(#z, #vss) * (vs == #v::#vss)
 }
 

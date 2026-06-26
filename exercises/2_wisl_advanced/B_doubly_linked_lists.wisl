@@ -32,13 +32,13 @@
 
 // This describes a doubly-linked list segment, unfolding from the left.
 predicate dlsegl(+x, +y, +v, +w, vs : List) {
-  (x == y) * (v == w) * (vs == nil);
+  (x == y) * (v == w) * (vs == []);
   (x -b> #a, #z, w) * (vs == #a :: #vss) * dlsegl(#z, y, v, x, #vss)
 }
 
 // This describes a doubly-linked list segment, unfolding from the right
 predicate dlsegr(+x, +y, +v, +w, vs : List) {
-  (x == y) * (v == w) * (vs == nil);
+  (x == y) * (v == w) * (vs == []);
   (v -b> #a, y, #z) * (vs == #vss @ [#a]) * dlsegr(x, v, #z, w, #vss)
 }
 

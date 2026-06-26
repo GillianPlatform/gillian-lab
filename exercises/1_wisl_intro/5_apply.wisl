@@ -61,7 +61,7 @@ function list_allocate_node(v){
 { list(ret, [ #v ]) }
 
 predicate list(+x, vs) {
-    (x == null) * (vs == nil);
+    (x == null) * (vs == []);
     (x -b> #v, #z) * list(#z, #vss) * (vs == #v::#vss)
 }
 

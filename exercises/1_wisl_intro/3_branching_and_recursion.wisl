@@ -34,7 +34,7 @@
 @config manual_fold : true
 
 predicate list(+x, vs) {
-    (x == null) * (vs == nil);
+    (x == null) * (vs == []);
     (x -b> #v, #z) * list(#z, #vss) * (vs == #v::#vss)
 }
 

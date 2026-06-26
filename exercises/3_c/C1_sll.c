@@ -37,7 +37,7 @@ pred sll(+p, alpha) {
   sll(#tail, #beta) *
   i__is_size_t(len alpha);
 
-  (p == NULL) * (alpha == nil)
+  (p == NULL) * (alpha == [])
 }
 */
 

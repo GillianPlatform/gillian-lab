@@ -24,7 +24,7 @@ typedef struct dln {
 
 /*@
 pred DLL(+x, alpha) {
-  (x == NULL) * (alpha == nil);
+  (x == NULL) * (alpha == []);
 
   (x -m> struct dln {#val; #prev; #next}) *
   DLL(#next, #beta) *
